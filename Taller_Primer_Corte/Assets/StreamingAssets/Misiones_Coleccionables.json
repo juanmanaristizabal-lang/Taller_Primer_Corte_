@@ -1,0 +1,30 @@
+{
+  "coleccionables": [
+    {"nombre": "Manzana Dorada Encantada", "rareza": "Poco Comun", "valor": 1000},
+    {"nombre": "Espada de Netherita", "rareza": "Comun", "valor": 100},
+    {"nombre": "Totem de Inmortalidad", "rareza": "Legendario", "valor": 2000},
+    {"nombre": "Tridente", "rareza": "Epico", "valor": 500},
+    {"nombre": "Masa", "rareza": "Raro", "valor": 2000},
+    {"nombre": "Elitros", "rareza": "Epico", "valor": 1500}
+  ],
+  "misiones":[
+    {"id": 1, "titulo": "La Edad de Piedra", "descripcion": "Pica piedra con tu nuevo pico ."},
+    {"id": 2, "titulo": "Mejorando Herramientas", "descripcion": "Fabrica un pico mejor."},
+    {"id": 3, "titulo": "La edad de hierro", "descripcion": "Funda un lingote de hierro."},
+    {"id": 4, "titulo": "Vistete", "descripcion": "Protegete con una armadura de hierro."},
+    {"id": 5, "titulo": "La cosa esta que Arde", "descripcion": "Llena un cubo con lava."},
+    {"id": 6, "titulo": "Hoy no, gracias", "descripcion": "Desvia un proyectil con escudo."},
+    {"id": 7, "titulo": "No es Hierronico", "descripcion": "Mejora tu pico."},
+    {"id": 8, "titulo": "¡Diamantes!", "descripcion": "Consigue un Diamante."},
+    {"id": 9, "titulo": "Cubreme de Diamantes", "descripcion": "La armadura de Diamantes salva vidas."},
+    {"id": 10, "titulo": "Aprendiz de mago", "descripcion": "Encanta un objeto en una mesa de encantamientos."},
+    {"id": 11, "titulo": "Mente Fria", "descripcion": "Consigue un bloque de obsidiana."},
+    {"id": 12, "titulo": "Plus Ultra", "descripcion": "Construye, activa y atraviesa un portal del Nether."},
+    {"id": 13, "titulo": "Zombiologo", "descripcion": "Debilita y cura un aldeano zombie."},
+    {"id": 14, "titulo": "Ojo espia", "descripcion": "Sigue un ojo de ender."},
+    {"id": 15, "titulo": "¿Se acabo?", "descripcion": "Atraviesa un portal del End."},
+    {"id": 16, "titulo": "El end", "descripcion": "O el comienzo."},
+    {"id": 17, "titulo": "Libera el End", "descripcion": "Buena Suerte."}
+    
+  ]
+}
