@@ -905,6 +905,8 @@ MonoBehaviour:
   listaColeccionables: []
   textoColeccionables: {fileID: 1339218870}
   textoMisionActual: {fileID: 314826521}
+  contentMisiones: {fileID: 0}
+  missionPrefab: {fileID: 0}
 --- !u!4 &623763781
 Transform:
   m_ObjectHideFlags: 0

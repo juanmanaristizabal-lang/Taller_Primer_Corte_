@@ -2,81 +2,92 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class ControllerGame : MonoBehaviour
 {
     public List<Coleccionables> listaColeccionables = new List<Coleccionables>();
-   
-    public Stack<Misiones> pilaMisiones = new Stack<Misiones>();   
+    public Stack<Misiones> pilaMisiones = new Stack<Misiones>();
 
     public TextMeshProUGUI textoColeccionables;
     public TextMeshProUGUI textoMisionActual;
-   
+
+    [Header("Scroll View")]
+    public Transform contentMisiones;
+    public GameObject missionPrefab;
 
     void Start()
     {
         CargarDatos();
         MostrarColeccionables();
         MostrarMisionActual();
-    }
-
-    void Update()
-    {
-
+        CrearListaMisionesUI();
     }
 
     void CargarDatos()
     {
         string path = Path.Combine(Application.streamingAssetsPath, "Misiones_Coleccionables.json");
 
-        if (File.Exists(path))
+        if (!File.Exists(path))
         {
-            string json = File.ReadAllText(path);
-
-            Misiones_Coleccionables data = JsonUtility.FromJson<Misiones_Coleccionables>(json);
-
-            listaColeccionables = data.coleccionables;
-            //listaMisiones = data.misiones;
-
-            for (int i = data.misiones.Count - 1; i >= 0; i--)
-            {
-                pilaMisiones.Push(data.misiones[i]);
-            }
-
-            Debug.Log("Datos cargados correctamente");
-            Debug.Log("Coleccionables: " + listaColeccionables.Count);
-            //Debug.Log("Misiones: " + listaMisiones.Count);
+            Debug.LogError("No se encontró JSON");
+            return;
         }
-        else
-        {
-            Debug.LogError("No se encontró Misiones_Coleccionables.json");
-        }
+
+        string json = File.ReadAllText(path);
+        Misiones_Coleccionables data = JsonUtility.FromJson<Misiones_Coleccionables>(json);
+
+        listaColeccionables = data.coleccionables;
+
+        for (int i = data.misiones.Count - 1; i >= 0; i--)
+            pilaMisiones.Push(data.misiones[i]);
     }
 
-    public Coleccionables BuscarColeccionablePorNombre(string nombre)
+    void CrearListaMisionesUI()
     {
-        return listaColeccionables.Find(c =>
-            c.Nombre.Equals(nombre, System.StringComparison.OrdinalIgnoreCase));
+        foreach (Transform child in contentMisiones)
+            Destroy(child.gameObject);
+
+        foreach (Misiones m in pilaMisiones)
+        {
+            GameObject obj = Instantiate(missionPrefab, contentMisiones);
+
+            MissionItemUI ui = obj.GetComponent<MissionItemUI>();
+            ui.Setup(m);
+        }
     }
+
     void MostrarColeccionables()
     {
-        if (textoColeccionables == null) return;
-
-        textoColeccionables.text = ""; 
+        textoColeccionables.text = "";
 
         foreach (Coleccionables c in listaColeccionables)
         {
-            textoColeccionables.text += $"Nombre: {c.Nombre}\nRareza: {c.Rareza}\nValor: {c.Valor}\n\n";
+            string color = ObtenerColorRareza(c.Rareza);
+
+            textoColeccionables.text +=
+                $"<color={color}>Nombre: {c.Nombre}\nRareza: {c.Rareza}\nValor: {c.Valor}</color>\n\n";
+        }
+    }
+
+    string ObtenerColorRareza(string rareza)
+    {
+        switch (rareza.ToLower())
+        {
+            case "comun": return "white";
+            case "poco comun": return "green";
+            case "raro": return "blue";
+            case "epico": return "magenta";
+            case "legendario": return "yellow";
+            default: return "white";
         }
     }
 
     public void MostrarMisionActual()
     {
-        if (textoMisionActual is null) return;
-
-        if (pilaMisiones.Count.Equals(0))
+        if (pilaMisiones.Count == 0)
         {
-            textoMisionActual.text = "No hay misiones activas en el momento";
+            textoMisionActual.text = "No hay misiones";
             return;
         }
 
@@ -86,24 +97,12 @@ public class ControllerGame : MonoBehaviour
 
     public void CompletarMision()
     {
-        if (pilaMisiones.Count.Equals(0))
-        {
-            Debug.Log("No hay misiones para completar");
-            return;
-        }
-        pilaMisiones.Pop();
-        MostrarMisionActual();
-    }
+        if (pilaMisiones.Count == 0) return;
 
-    public void Deshacer()
-    {
-        if(pilaMisiones.Count.Equals(0))
-        {
-            Debug.Log("No hay misiones para deshacer");
-            return;
-        }
-        pilaMisiones.Pop();
+        Misiones m = pilaMisiones.Pop();
+        m.Completada = true;
+
         MostrarMisionActual();
+        CrearListaMisionesUI();
     }
 }
-
