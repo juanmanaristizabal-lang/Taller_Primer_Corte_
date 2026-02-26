@@ -14,6 +14,8 @@ public class ControllerGame : MonoBehaviour
     public TextMeshProUGUI textoMisionActual;
     public TMP_InputField textobuscar;
     public Misiones ultimaMision = null;
+    public GameObject PanelMisionCompletada;
+    public GameObject PanelMisionEliminada;
 
     [Header("Scroll View")]
     public Transform contentMisiones;
@@ -22,13 +24,19 @@ public class ControllerGame : MonoBehaviour
     [Header("Paneles")]
     public GameObject panelAviso;
 
-    void Start()
-    {
-        ultimaMision = null;
 
-        CargarDatos();
-        MostrarColeccionables();
-        MostrarMisionActual();
+        void Start()
+        {
+            CargarDatos();
+            MostrarColeccionables();
+            MostrarMisionActual();
+        }
+
+        void OnEnable()
+        {
+            CargarDatos();
+            MostrarColeccionables();
+            MostrarMisionActual();
     }
 
     void CargarDatos()
@@ -49,14 +57,13 @@ public class ControllerGame : MonoBehaviour
         for (int i = data.misiones.Count - 1; i >= 0; i--)
             pilaMisiones.Push(data.misiones[i]);
     }
-    public void MostrarColeccionables()
+   public void MostrarColeccionables()
     {
         textoColeccionables.text = "";
 
         foreach (Coleccionables c in listaColeccionables)
         {
             string color = ObtenerColorRareza(c.Rareza);
-
             textoColeccionables.text +=
                 $"<color={color}>{c.Nombre}</color>\n\n";
         }
@@ -84,7 +91,8 @@ public class ControllerGame : MonoBehaviour
         }
 
         Misiones m = pilaMisiones.Peek();
-        textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
+        textoMisionActual.text =
+            $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
     }
     public void CompletarMision()
     {
@@ -95,6 +103,7 @@ public class ControllerGame : MonoBehaviour
         m.Completada = true;
 
         MostrarMisionActual();
+        PanelMisionCompletada.SetActive(true);
     }
     public void buscar()
     {
@@ -137,20 +146,25 @@ public class ControllerGame : MonoBehaviour
 
         if (ultimaMision == null)
         {
-            Debug.Log("No se puede hacer undo porque no se ha completado ninguna misión.");
             panelAviso.SetActive(true);
             return;
         }
 
         pilaMisiones.Push(ultimaMision);
-        Debug.Log("la ultima mision es :" + ultimaMision.Titulo + ".");
-
         ultimaMision = null;
 
         MostrarMisionActual();
+        PanelMisionEliminada.SetActive(true);
     }
-    public void EsconderAviso()
+
+    public void EsconderPanelCompletado()
     {
-        panelAviso.SetActive(false);
+        PanelMisionCompletada.SetActive(false);
     }
+
+    public void EsconderPanelTerminada()
+    {
+        PanelMisionEliminada.SetActive(false);
+    }
+
 }
