@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Resources;
 
 public class ControllerGame : MonoBehaviour
 {
@@ -12,13 +13,19 @@ public class ControllerGame : MonoBehaviour
     public TextMeshProUGUI textoColeccionables;
     public TextMeshProUGUI textoMisionActual;
     public TMP_InputField textobuscar;
+    public Misiones ultimaMision = null;
 
     [Header("Scroll View")]
     public Transform contentMisiones;
     public GameObject missionPrefab;
 
+    [Header("Paneles")]
+    public GameObject panelAviso;
+
     void Start()
     {
+        ultimaMision = null;
+
         CargarDatos();
         MostrarColeccionables();
         MostrarMisionActual();
@@ -44,7 +51,7 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
-    void CrearListaMisionesUI()
+    void CrearListaMisionesUI()//como esto tiene que ver con el prefab lo hace fifo pero a mi me parece codigo innesesario
     {
         foreach (Transform child in contentMisiones)
             Destroy(child.gameObject);
@@ -95,12 +102,12 @@ public class ControllerGame : MonoBehaviour
         Misiones m = pilaMisiones.Peek();
         textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
     }
-
     public void CompletarMision()
     {
         if (pilaMisiones.Count == 0) return;
 
         Misiones m = pilaMisiones.Pop();
+        ultimaMision = m;
         m.Completada = true;
 
         MostrarMisionActual();
@@ -110,8 +117,6 @@ public class ControllerGame : MonoBehaviour
     {
 
         string textoBusqueda = textobuscar.text;
-        Debug.Log("Texto ingresado: " + textoBusqueda);
-
         if (string.IsNullOrEmpty(textoBusqueda))
         {
             textoColeccionables.text = "Escribe algo para buscar...";
@@ -125,12 +130,8 @@ public class ControllerGame : MonoBehaviour
 
         foreach (Coleccionables c in listaColeccionables)
         {
-            Debug.Log("Comparando con: " + c.Nombre +" = "+textoBusqueda);
-
             if (c.Nombre.Equals( textoBusqueda))
             {
-                Debug.Log("¡Coincidencia encontrada!");
-
                 string color = ObtenerColorRareza(c.Rareza);
 
                 textoColeccionables.text +=
@@ -146,5 +147,28 @@ public class ControllerGame : MonoBehaviour
         {
             textoColeccionables.text = "No se encontro ningun objeto.";
         }
+    }
+    public void undo()
+    {
+        Debug.Log("SE UNDIO");
+
+        if (ultimaMision == null)
+        {
+            Debug.Log("No se puede hacer undo porque no se ha completado ninguna misión.");
+            panelAviso.SetActive(true);
+            return;
+        }
+
+        pilaMisiones.Push(ultimaMision);
+        Debug.Log("la ultima mision es :" + ultimaMision.Titulo + ".");
+
+        ultimaMision = null;
+
+        MostrarMisionActual();
+        CrearListaMisionesUI();
+    }
+    public void EsconderAviso()
+    { 
+        panelAviso.SetActive(false); 
     }
 }
