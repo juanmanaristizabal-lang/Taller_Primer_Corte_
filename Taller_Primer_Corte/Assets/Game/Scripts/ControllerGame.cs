@@ -15,17 +15,12 @@ public class ControllerGame : MonoBehaviour
     public TMP_InputField textobuscar;
     public Misiones ultimaMision = null;
 
-  
+    [Header("Scroll View")]
+    public Transform contentMisiones;
+    public GameObject missionPrefab;
 
     [Header("Paneles")]
     public GameObject panelAviso;
-
-    
-
-    [Header("Detalle UI")]
-    public TMP_Text nombreDetalle;
-    public TMP_Text rarezaDetalle;
-    public TMP_Text valorDetalle;
 
     void Start()
     {
@@ -34,7 +29,6 @@ public class ControllerGame : MonoBehaviour
         CargarDatos();
         MostrarColeccionables();
         MostrarMisionActual();
-        
     }
 
     void CargarDatos()
@@ -55,10 +49,7 @@ public class ControllerGame : MonoBehaviour
         for (int i = data.misiones.Count - 1; i >= 0; i--)
             pilaMisiones.Push(data.misiones[i]);
     }
-
-
-
-    void MostrarColeccionables()
+    public void MostrarColeccionables()
     {
         textoColeccionables.text = "";
 
@@ -67,7 +58,7 @@ public class ControllerGame : MonoBehaviour
             string color = ObtenerColorRareza(c.Rareza);
 
             textoColeccionables.text +=
-                $"<color={color}>Nombre: {c.Nombre}\nRareza: {c.Rareza}\nValor: {c.Valor}</color>\n\n";
+                $"<color={color}>{c.Nombre}</color>\n\n";
         }
     }
 
@@ -95,7 +86,6 @@ public class ControllerGame : MonoBehaviour
         Misiones m = pilaMisiones.Peek();
         textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
     }
-
     public void CompletarMision()
     {
         if (pilaMisiones.Count == 0) return;
@@ -105,9 +95,7 @@ public class ControllerGame : MonoBehaviour
         m.Completada = true;
 
         MostrarMisionActual();
-       
     }
-
     public void buscar()
     {
 
@@ -143,7 +131,6 @@ public class ControllerGame : MonoBehaviour
             textoColeccionables.text = "No se encontro ningun objeto.";
         }
     }
-
     public void undo()
     {
         Debug.Log("SE UNDIO");
@@ -161,20 +148,9 @@ public class ControllerGame : MonoBehaviour
         ultimaMision = null;
 
         MostrarMisionActual();
-      
     }
-
     public void EsconderAviso()
     {
         panelAviso.SetActive(false);
-    }
-
-    
-
-    public void MostrarDetalle(Coleccionables c)
-    {
-        nombreDetalle.text = "Nombre: " + c.Nombre;
-        rarezaDetalle.text = "Rareza: " + c.Rareza;
-        valorDetalle.text = "Valor: " + c.Valor;
     }
 }
