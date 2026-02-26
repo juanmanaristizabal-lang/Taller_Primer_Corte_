@@ -22,6 +22,15 @@ public class ControllerGame : MonoBehaviour
     [Header("Paneles")]
     public GameObject panelAviso;
 
+    [Header("Inventario UI")]
+    public Transform contentColeccionables;
+    public GameObject coleccionablePrefab;
+
+    [Header("Detalle UI")]
+    public TMP_Text nombreDetalle;
+    public TMP_Text rarezaDetalle;
+    public TMP_Text valorDetalle;
+
     void Start()
     {
         ultimaMision = null;
@@ -30,6 +39,7 @@ public class ControllerGame : MonoBehaviour
         MostrarColeccionables();
         MostrarMisionActual();
         CrearListaMisionesUI();
+        CrearInventarioUI();
     }
 
     void CargarDatos()
@@ -51,7 +61,7 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
-    void CrearListaMisionesUI()//como esto tiene que ver con el prefab lo hace fifo pero a mi me parece codigo innesesario
+    void CrearListaMisionesUI()
     {
         foreach (Transform child in contentMisiones)
             Destroy(child.gameObject);
@@ -102,6 +112,7 @@ public class ControllerGame : MonoBehaviour
         Misiones m = pilaMisiones.Peek();
         textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
     }
+
     public void CompletarMision()
     {
         if (pilaMisiones.Count == 0) return;
@@ -113,6 +124,7 @@ public class ControllerGame : MonoBehaviour
         MostrarMisionActual();
         CrearListaMisionesUI();
     }
+
     public void buscar()
     {
 
@@ -130,7 +142,7 @@ public class ControllerGame : MonoBehaviour
 
         foreach (Coleccionables c in listaColeccionables)
         {
-            if (c.Nombre.Equals( textoBusqueda))
+            if (c.Nombre.Equals(textoBusqueda))
             {
                 string color = ObtenerColorRareza(c.Rareza);
 
@@ -148,6 +160,7 @@ public class ControllerGame : MonoBehaviour
             textoColeccionables.text = "No se encontro ningun objeto.";
         }
     }
+
     public void undo()
     {
         Debug.Log("SE UNDIO");
@@ -167,8 +180,30 @@ public class ControllerGame : MonoBehaviour
         MostrarMisionActual();
         CrearListaMisionesUI();
     }
+
     public void EsconderAviso()
-    { 
-        panelAviso.SetActive(false); 
+    {
+        panelAviso.SetActive(false);
+    }
+
+    void CrearInventarioUI()
+    {
+        foreach (Transform child in contentColeccionables)
+            Destroy(child.gameObject);
+
+        foreach (Coleccionables c in listaColeccionables)
+        {
+            GameObject obj = Instantiate(coleccionablePrefab, contentColeccionables);
+
+            ColeccionableItemUI ui = obj.GetComponent<ColeccionableItemUI>();
+            ui.Setup(c, this);
+        }
+    }
+
+    public void MostrarDetalle(Coleccionables c)
+    {
+        nombreDetalle.text = "Nombre: " + c.Nombre;
+        rarezaDetalle.text = "Rareza: " + c.Rareza;
+        valorDetalle.text = "Valor: " + c.Valor;
     }
 }
