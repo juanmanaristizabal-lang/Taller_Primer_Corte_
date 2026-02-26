@@ -11,6 +11,7 @@ public class ControllerGame : MonoBehaviour
 
     public TextMeshProUGUI textoColeccionables;
     public TextMeshProUGUI textoMisionActual;
+    public TMP_InputField textobuscar;
 
     [Header("Scroll View")]
     public Transform contentMisiones;
@@ -74,10 +75,10 @@ public class ControllerGame : MonoBehaviour
     {
         switch (rareza.ToLower())
         {
-            case "comun": return "white";
+            case "comun": return "#CDCDCD";
             case "poco comun": return "green";
             case "raro": return "blue";
-            case "epico": return "magenta";
+            case "epico": return "#FF00FF";
             case "legendario": return "yellow";
             default: return "white";
         }
@@ -104,5 +105,46 @@ public class ControllerGame : MonoBehaviour
 
         MostrarMisionActual();
         CrearListaMisionesUI();
+    }
+    public void buscar()
+    {
+
+        string textoBusqueda = textobuscar.text;
+        Debug.Log("Texto ingresado: " + textoBusqueda);
+
+        if (string.IsNullOrEmpty(textoBusqueda))
+        {
+            textoColeccionables.text = "Escribe algo para buscar...";
+            return;
+        }
+
+        textoColeccionables.text = "";
+
+        bool encontrado = false;
+
+
+        foreach (Coleccionables c in listaColeccionables)
+        {
+            Debug.Log("Comparando con: " + c.Nombre +" = "+textoBusqueda);
+
+            if (c.Nombre.Equals( textoBusqueda))
+            {
+                Debug.Log("¡Coincidencia encontrada!");
+
+                string color = ObtenerColorRareza(c.Rareza);
+
+                textoColeccionables.text +=
+                    $"<color={color}>Nombre: {c.Nombre}\n" +
+                    $"Rareza: {c.Rareza}\n" +
+                    $"Valor: {c.Valor}</color>\n\n";
+
+                encontrado = true;
+            }
+        }
+
+        if (!encontrado)
+        {
+            textoColeccionables.text = "No se encontro ningun objeto.";
+        }
     }
 }
