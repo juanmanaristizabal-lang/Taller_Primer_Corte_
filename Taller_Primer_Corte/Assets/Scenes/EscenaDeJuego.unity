@@ -905,7 +905,7 @@ MonoBehaviour:
   listaColeccionables: []
   textoColeccionables: {fileID: 1339218870}
   textoMisionActual: {fileID: 314826521}
-  textobuscar: {fileID: 1462071612}
+  textobuscar: {fileID: 1059892027}
   contentMisiones: {fileID: 0}
   missionPrefab: {fileID: 0}
 --- !u!4 &623763781
