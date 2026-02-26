@@ -15,16 +15,12 @@ public class ControllerGame : MonoBehaviour
     public TMP_InputField textobuscar;
     public Misiones ultimaMision = null;
 
-    [Header("Scroll View")]
-    public Transform contentMisiones;
-    public GameObject missionPrefab;
+  
 
     [Header("Paneles")]
     public GameObject panelAviso;
 
-    [Header("Inventario UI")]
-    public Transform contentColeccionables;
-    public GameObject coleccionablePrefab;
+    
 
     [Header("Detalle UI")]
     public TMP_Text nombreDetalle;
@@ -38,8 +34,7 @@ public class ControllerGame : MonoBehaviour
         CargarDatos();
         MostrarColeccionables();
         MostrarMisionActual();
-        CrearListaMisionesUI();
-        CrearInventarioUI();
+        
     }
 
     void CargarDatos()
@@ -61,19 +56,7 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
-    void CrearListaMisionesUI()
-    {
-        foreach (Transform child in contentMisiones)
-            Destroy(child.gameObject);
 
-        foreach (Misiones m in pilaMisiones)
-        {
-            GameObject obj = Instantiate(missionPrefab, contentMisiones);
-
-            MissionItemUI ui = obj.GetComponent<MissionItemUI>();
-            ui.Setup(m);
-        }
-    }
 
     void MostrarColeccionables()
     {
@@ -122,7 +105,7 @@ public class ControllerGame : MonoBehaviour
         m.Completada = true;
 
         MostrarMisionActual();
-        CrearListaMisionesUI();
+       
     }
 
     public void buscar()
@@ -178,7 +161,7 @@ public class ControllerGame : MonoBehaviour
         ultimaMision = null;
 
         MostrarMisionActual();
-        CrearListaMisionesUI();
+      
     }
 
     public void EsconderAviso()
@@ -186,19 +169,7 @@ public class ControllerGame : MonoBehaviour
         panelAviso.SetActive(false);
     }
 
-    void CrearInventarioUI()
-    {
-        foreach (Transform child in contentColeccionables)
-            Destroy(child.gameObject);
-
-        foreach (Coleccionables c in listaColeccionables)
-        {
-            GameObject obj = Instantiate(coleccionablePrefab, contentColeccionables);
-
-            ColeccionableItemUI ui = obj.GetComponent<ColeccionableItemUI>();
-            ui.Setup(c, this);
-        }
-    }
+    
 
     public void MostrarDetalle(Coleccionables c)
     {

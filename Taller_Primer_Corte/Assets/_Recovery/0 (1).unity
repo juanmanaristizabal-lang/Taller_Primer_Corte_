@@ -1218,11 +1218,7 @@ MonoBehaviour:
     titulo: 
     descripcion: 
     completada: 0
-  contentMisiones: {fileID: 0}
-  missionPrefab: {fileID: 0}
   panelAviso: {fileID: 2071488862}
-  contentColeccionables: {fileID: 0}
-  coleccionablePrefab: {fileID: 2308006215437896718, guid: e5feabd8b6e820e4cac3784b6c4dc829, type: 3}
   nombreDetalle: {fileID: 1494482664}
   rarezaDetalle: {fileID: 814437686}
   valorDetalle: {fileID: 952761694}
