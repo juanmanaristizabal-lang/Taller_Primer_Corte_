@@ -20,6 +20,9 @@ public class ControllerGame : MonoBehaviour
     public GameObject missionPrefab;
 
     [Header("Paneles")]
+    public GameObject panelMenu;
+    public GameObject panelMisiones;
+    public GameObject panelColeccionables;
     public GameObject panelAviso;
 
     void Start()
@@ -30,6 +33,10 @@ public class ControllerGame : MonoBehaviour
         MostrarColeccionables();
         MostrarMisionActual();
         CrearListaMisionesUI();
+
+        panelMenu.SetActive(true);
+        panelMisiones.SetActive(false);
+        panelColeccionables.SetActive(false);
     }
 
     void CargarDatos()
@@ -171,4 +178,28 @@ public class ControllerGame : MonoBehaviour
     { 
         panelAviso.SetActive(false); 
     }
+    public void AbrirMisiones()
+    {
+        panelMisiones.SetActive(true);
+        panelColeccionables.SetActive(false);
+        panelMenu.SetActive(false);
+    }
+
+    public void AbrirColeccionables()
+    {
+        panelColeccionables.SetActive(true);
+        panelMisiones.SetActive(false);
+        panelMenu.SetActive(false);
+    }
+
+    public void RegresarMenu()
+    {
+        panelMenu.SetActive(true);
+        panelMisiones.SetActive(false);
+        panelColeccionables.SetActive(false);
+    }
+
+
 }
+
+
