@@ -24,26 +24,14 @@ public class ControllerGame : MonoBehaviour
     public TextMeshProUGUI misionesCompletadas;
     public Image menuColores;
 
-    // =========================
-    // ITEMS COLECCIONABLES (6 MANUALES)
-    // =========================
-    [Header("Items UI")]
-    public ColeccionableUI item1;
-    public ColeccionableUI item2;
-    public ColeccionableUI item3;
-    public ColeccionableUI item4;
-    public ColeccionableUI item5;
-    public ColeccionableUI item6;
 
+   
     // =========================
     // PANEL INFO
     // =========================
     [Header("Panel Info Coleccionable")]
-    public GameObject panelInfoColeccionable;
-    public Image infoImagen;
-    public TextMeshProUGUI infoNombre;
-    public TextMeshProUGUI infoRareza;
-    public TextMeshProUGUI infoValor;
+    public TextMeshProUGUI textoJsonColeccionables;
+
 
     [Header("Imagenes Misiones")]
     public Sprite imagen1;
@@ -71,9 +59,14 @@ public class ControllerGame : MonoBehaviour
     public GameObject panelMisiones;
     public GameObject panelColeccionables;
     public GameObject panelAviso;
+    public GameObject panelMostrarColeccionables;
+
+  
+   
 
     private int ultimaAccion = 0;
     private Misiones ultimaMisionRemovida;
+
 
     // =====================================================
     // START
@@ -81,10 +74,10 @@ public class ControllerGame : MonoBehaviour
     void Start()
     {
         CargarDatos();
-        ConfigurarColeccionablesUI();
+
         MostrarMisionActual();
 
-        panelInfoColeccionable.SetActive(false);
+        panelMostrarColeccionables.SetActive(false);
         panelMenu.SetActive(true);
         panelMisiones.SetActive(false);
         panelColeccionables.SetActive(false);
@@ -112,41 +105,37 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
-    // =====================================================
-    // CONFIGURAR ITEMS (6 FIJOS)
-    // =====================================================
-    void ConfigurarColeccionablesUI()
-    {
-        if (listaColeccionables.Count < 6)
-        {
-            Debug.LogError("El JSON necesita mínimo 6 coleccionables");
-            return;
-        }
 
-        item1.Setup(listaColeccionables[0], this);
-        item2.Setup(listaColeccionables[1], this);
-        item3.Setup(listaColeccionables[2], this);
-        item4.Setup(listaColeccionables[3], this);
-        item5.Setup(listaColeccionables[4], this);
-        item6.Setup(listaColeccionables[5], this);
-    }
+
 
     // =====================================================
     // MOSTRAR INFO COLECCIONABLE
     // =====================================================
-    public void MostrarInfoColeccionable(Coleccionables c, Sprite img)
+    public void MostrarInfoColeccionable(string nombreColeccionable)
     {
-        panelInfoColeccionable.SetActive(true);
+        foreach (Coleccionables c in listaColeccionables)
+        {
+            if (c.Nombre == nombreColeccionable)
+            {
+                panelMenu.SetActive(false);
+                panelMisiones.SetActive(false);
+                panelColeccionables.SetActive(false);
+                panelMostrarColeccionables.SetActive(true);
 
-        infoImagen.sprite = img;
-        infoNombre.text = c.Nombre;
-        infoRareza.text = "Rareza: " + c.Rareza;
-        infoValor.text = "Valor: " + c.Valor;
+                string json = JsonUtility.ToJson(c, true);
+                textoJsonColeccionables.text = json;
+
+                return;
+            }
+        }
+
+        Debug.LogWarning("No se encontró el coleccionable");
     }
+
 
     public void CerrarInfoColeccionable()
     {
-        panelInfoColeccionable.SetActive(false);
+        panelMostrarColeccionables.SetActive(false);
     }
 
     // =====================================================
@@ -276,6 +265,7 @@ public class ControllerGame : MonoBehaviour
         panelMenu.SetActive(true);
         panelMisiones.SetActive(false);
         panelColeccionables.SetActive(false);
+        panelMostrarColeccionables.SetActive(false); 
     }
 
     public void EsconderAviso()
