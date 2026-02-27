@@ -119,27 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &101681213 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3923517971528650723, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
-  m_PrefabInstance: {fileID: 6152647391622065904}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &101681215 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6790030388174365276, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
-  m_PrefabInstance: {fileID: 6152647391622065904}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &101681216 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3642711893966780517, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
-  m_PrefabInstance: {fileID: 6152647391622065904}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 101681213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1338506249 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1441114353221347141, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
@@ -407,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ControllerGame
   listaColeccionables: []
-  textoColeccionables: {fileID: 101681216}
+  textoColeccionables: {fileID: 0}
   textoMisionActual: {fileID: 1639871506}
   textobuscar: {fileID: 0}
   ultimaMision:
@@ -417,9 +396,9 @@ MonoBehaviour:
     completada: 0
   PanelMisionCompletada: {fileID: 1940441041}
   PanelMisionEliminada: {fileID: 1338506249}
-  contentMisiones: {fileID: 101681215}
-  missionPrefab: {fileID: 101681213}
-  panelAviso: {fileID: 101681213}
+  contentMisiones: {fileID: 0}
+  missionPrefab: {fileID: 0}
+  panelAviso: {fileID: 0}
 --- !u!4 &2055356726
 Transform:
   m_ObjectHideFlags: 0
@@ -447,6 +426,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2055356725}
+    - target: {fileID: 1436016532244465415, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 627.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 1436016532244465415, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 15.691
+      objectReference: {fileID: 0}
     - target: {fileID: 2647703207557800455, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -544,7 +531,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3923517971528650723, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98404d1871e34ca4db13d4b33383a521, type: 3}

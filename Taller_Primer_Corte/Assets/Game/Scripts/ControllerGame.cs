@@ -24,19 +24,33 @@ public class ControllerGame : MonoBehaviour
     [Header("Paneles")]
     public GameObject panelAviso;
 
+<<<<<<< HEAD
+    [Header("Scroll Coleccionables")]
+    public Transform contentColeccionables;
+    public GameObject prefabColeccionableItem;
 
-        void Start()
+
+=======
+>>>>>>> parent of d40fb7e (hola pausa aktiva)
+    void Start()
         {
             CargarDatos();
             MostrarColeccionables();
             MostrarMisionActual();
         }
 
+<<<<<<< HEAD
         void OnEnable()
         {
             CargarDatos();
             MostrarColeccionables();
             MostrarMisionActual();
+=======
+        CargarDatos();
+        MostrarColeccionables();
+        MostrarMisionActual();
+        CrearListaMisionesUI();
+>>>>>>> parent of d40fb7e (hola pausa aktiva)
     }
 
     void CargarDatos()
@@ -57,7 +71,26 @@ public class ControllerGame : MonoBehaviour
         for (int i = data.misiones.Count - 1; i >= 0; i--)
             pilaMisiones.Push(data.misiones[i]);
     }
+<<<<<<< HEAD
    public void MostrarColeccionables()
+=======
+
+    void CrearListaMisionesUI()//como esto tiene que ver con el prefab lo hace fifo pero a mi me parece codigo innesesario
+    {
+        foreach (Transform child in contentMisiones)
+            Destroy(child.gameObject);
+
+        foreach (Misiones m in pilaMisiones)
+        {
+            GameObject obj = Instantiate(missionPrefab, contentMisiones);
+
+            MissionItemUI ui = obj.GetComponent<MissionItemUI>();
+            ui.Setup(m);
+        }
+    }
+
+    void MostrarColeccionables()
+>>>>>>> parent of d40fb7e (hola pausa aktiva)
     {
         textoColeccionables.text = "";
 
@@ -122,7 +155,7 @@ public class ControllerGame : MonoBehaviour
 
         foreach (Coleccionables c in listaColeccionables)
         {
-            if (c.Nombre.Equals(textoBusqueda))
+            if (c.Nombre.Equals( textoBusqueda))
             {
                 string color = ObtenerColorRareza(c.Rareza);
 
@@ -156,6 +189,7 @@ public class ControllerGame : MonoBehaviour
         MostrarMisionActual();
         PanelMisionEliminada.SetActive(true);
     }
+<<<<<<< HEAD
 
     public void EsconderPanelCompletado()
     {
@@ -167,4 +201,10 @@ public class ControllerGame : MonoBehaviour
         PanelMisionEliminada.SetActive(false);
     }
 
+=======
+    public void EsconderAviso()
+    { 
+        panelAviso.SetActive(false); 
+    }
+>>>>>>> parent of d40fb7e (hola pausa aktiva)
 }
