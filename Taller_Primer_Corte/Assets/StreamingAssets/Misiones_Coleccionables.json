@@ -8,8 +8,8 @@
     {"nombre": "Elitros", "rareza": "Epico", "valor": 1500}
   ],
   "misiones":[
-    {"id": 1, "titulo": "La Edad de Piedra", "descripcion": "Pica piedra con tu nuevo pico ."},
-    {"id": 2, "titulo": "Mejorando Herramientas", "descripcion": "Fabrica un pico mejor."},
+    {"id": 1, "titulo": "La Edad de piedra", "descripcion": "Pica piedra con tu nuevo pico ."},
+    {"id": 2, "titulo": "Mejorando Armamento", "descripcion": "Fabrica un pico mejor."},
     {"id": 3, "titulo": "La edad de hierro", "descripcion": "Funda un lingote de hierro."},
     {"id": 4, "titulo": "Vistete", "descripcion": "Protegete con una armadura de hierro."},
     {"id": 5, "titulo": "La cosa esta que Arde", "descripcion": "Llena un cubo con lava."},

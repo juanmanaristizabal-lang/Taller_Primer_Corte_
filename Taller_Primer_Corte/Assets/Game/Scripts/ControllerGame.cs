@@ -1,8 +1,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,13 +22,27 @@ public class ControllerGame : MonoBehaviour
     public TextMeshProUGUI misionesCompletadas;
     public Image menuColores;
 
+    // =========================
+    // AUDIO
+    // =========================
+    [Header("Audio")]
+    public AudioSource musicaSource;
+    public AudioSource sfxSource;
 
-   
+    public AudioClip musicaFondo;
+    public AudioClip sonidoClick;
+
     // =========================
     // PANEL INFO
     // =========================
     [Header("Panel Info Coleccionable")]
     public TextMeshProUGUI textoJsonColeccionables;
+
+    [Header("UI Info Coleccionable")]
+    public TextMeshProUGUI nombreColeccionableTXT;
+    public TextMeshProUGUI rarezaColeccionableTXT;
+    public TextMeshProUGUI valorColeccionableTXT;
+    public Image imagenColeccionableUI;
 
 
     [Header("Imagenes Misiones")]
@@ -61,8 +73,15 @@ public class ControllerGame : MonoBehaviour
     public GameObject panelAviso;
     public GameObject panelMostrarColeccionables;
 
-  
-   
+    [Header("Imagenes Coleccionables")]
+    public Sprite manzanaDorada;
+    public Sprite netheriteSword;
+    public Sprite elitros;
+    public Sprite mace;
+    public Sprite trident;
+    public Sprite totem;
+    // agrega los que tengas
+
 
     private int ultimaAccion = 0;
     private Misiones ultimaMisionRemovida;
@@ -74,7 +93,7 @@ public class ControllerGame : MonoBehaviour
     void Start()
     {
         CargarDatos();
-
+        IniciarMusica();
         MostrarMisionActual();
 
         panelMostrarColeccionables.SetActive(false);
@@ -105,8 +124,43 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
+    Color ObtenerColorRareza(string rareza)
+    {
+        switch (rareza.ToLower())
+        {
+            case "comun": return Color.white;
+            case "poco comun": return Color.green;
+            case "raro": return Color.blue;
+            case "epico": return new Color(1f, 0f, 1f);
+            case "legendario": return Color.yellow;
+            default: return Color.gray;
+        }
+    }
 
+    Sprite ObtenerImagenColeccionable(string nombre)
+    {
+        switch (nombre)
+        {
+            case "Manzana Dorada Encantada":
+                return manzanaDorada;
 
+            case "Espada de Netherita":
+                return netheriteSword;
+
+            case "Maza":
+                return mace;
+
+            case "Tridente":
+                return trident;
+
+            case "Totem":
+                return totem;
+            case "elitros":
+                return elitros;
+        }
+
+        return null;
+    }
 
     // =====================================================
     // MOSTRAR INFO COLECCIONABLE
@@ -117,19 +171,36 @@ public class ControllerGame : MonoBehaviour
         {
             if (c.Nombre == nombreColeccionable)
             {
+                // Cambiar paneles
                 panelMenu.SetActive(false);
                 panelMisiones.SetActive(false);
                 panelColeccionables.SetActive(false);
                 panelMostrarColeccionables.SetActive(true);
 
-                string json = JsonUtility.ToJson(c, true);
-                textoJsonColeccionables.text = json;
+                // COLOR SEGUN RAREZA
+                Color colorRareza = ObtenerColorRareza(c.Rareza);
+
+                // TEXTO COMPLETO (TODO DEL MISMO COLOR)
+                nombreColeccionableTXT.text = c.Nombre;
+                rarezaColeccionableTXT.text = "Rareza: " + c.Rareza;
+                valorColeccionableTXT.text = "Valor: " + c.Valor;
+
+                nombreColeccionableTXT.color = colorRareza;
+                rarezaColeccionableTXT.color = colorRareza;
+                valorColeccionableTXT.color = colorRareza;
+
+                // IMAGEN
+                Sprite sprite = ObtenerImagenColeccionable(c.Nombre);
+
+                if (sprite != null)
+                    imagenColeccionableUI.sprite = sprite;
 
                 return;
             }
         }
+    
 
-        Debug.LogWarning("No se encontró el coleccionable");
+    Debug.LogWarning("No se encontró el coleccionable");
     }
 
 
@@ -265,11 +336,54 @@ public class ControllerGame : MonoBehaviour
         panelMenu.SetActive(true);
         panelMisiones.SetActive(false);
         panelColeccionables.SetActive(false);
-        panelMostrarColeccionables.SetActive(false); 
+        panelMostrarColeccionables.SetActive(false);
     }
 
     public void EsconderAviso()
     {
         panelAviso.SetActive(false);
     }
+
+    // =====================================================
+    // VOLVER A COLECCIONABLES
+    // =====================================================
+    public void VolverAColeccionables()
+    {
+        panelMostrarColeccionables.SetActive(false);
+        panelColeccionables.SetActive(true);
+        panelMenu.SetActive(false);
+        panelMisiones.SetActive(false);
+    }
+    // =====================================================
+    // SALIR DEL JUEGO
+    // =====================================================
+    public void SalirDelJuego()
+    {
+        Debug.Log("Cerrando juego...");
+
+        #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // Detiene Play en Unity
+    #else
+    Application.Quit(); // Cierra el juego compilado
+        #endif
+    }
+    void IniciarMusica()
+    {
+        if (musicaSource != null && musicaFondo != null)
+        {
+            musicaSource.clip = musicaFondo;
+            musicaSource.loop = true;
+            musicaSource.Play();
+        }
+    }
+    public void SonidoBoton()
+    {
+        if (sfxSource != null && sonidoClick != null)
+        {
+            sfxSource.PlayOneShot(sonidoClick);
+        }
+    }
+
+
+
 }
