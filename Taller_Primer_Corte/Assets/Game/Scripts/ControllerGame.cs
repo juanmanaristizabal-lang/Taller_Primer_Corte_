@@ -1,23 +1,22 @@
+
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Resources;
-
 public class ControllerGame : MonoBehaviour
 {
     public List<Coleccionables> listaColeccionables = new List<Coleccionables>();
     public Stack<Misiones> pilaMisiones = new Stack<Misiones>();
+    public Stack<Misiones> pilaCompletadas = new Stack<Misiones>();
 
     public TextMeshProUGUI textoColeccionables;
     public TextMeshProUGUI textoMisionActual;
     public TMP_InputField textobuscar;
-    public Misiones ultimaMision = null;
-
-    [Header("Scroll View")]
-    public Transform contentMisiones;
-    public GameObject missionPrefab;
+    private int ultimaAccion = 0;
+    private Misiones ultimaMisionRemovida;
+    public RawImage imagenMision;
+    public TextMeshProUGUI misionesCompletadas;
 
     [Header("Paneles")]
     public GameObject panelMenu;
@@ -25,15 +24,32 @@ public class ControllerGame : MonoBehaviour
     public GameObject panelColeccionables;
     public GameObject panelAviso;
 
+    [Header("Misiones")]
+    public Sprite imagen1;
+    public Sprite imagen2;
+    public Sprite imagen3;
+    public Sprite imagen4;
+    public Sprite imagen5;
+    public Sprite imagen6;
+    public Sprite imagen7;
+    public Sprite imagen8;
+    public Sprite imagen9;
+    public Sprite imagen10;
+    public Sprite imagen11;
+    public Sprite imagen12;
+    public Sprite imagen13;
+    public Sprite imagen14;
+    public Sprite imagen15;
+    public Sprite imagen16;
+    public Sprite imagen17;
+    public Image menuColores;
+
     void Start()
     {
-        ultimaMision = null;
 
         CargarDatos();
         MostrarColeccionables();
         MostrarMisionActual();
-        CrearListaMisionesUI();
-
         panelMenu.SetActive(true);
         panelMisiones.SetActive(false);
         panelColeccionables.SetActive(false);
@@ -45,7 +61,6 @@ public class ControllerGame : MonoBehaviour
 
         if (!File.Exists(path))
         {
-            Debug.LogError("No se encontró JSON");
             return;
         }
 
@@ -58,19 +73,7 @@ public class ControllerGame : MonoBehaviour
             pilaMisiones.Push(data.misiones[i]);
     }
 
-    void CrearListaMisionesUI()//como esto tiene que ver con el prefab lo hace fifo pero a mi me parece codigo innesesario
-    {
-        foreach (Transform child in contentMisiones)
-            Destroy(child.gameObject);
 
-        foreach (Misiones m in pilaMisiones)
-        {
-            GameObject obj = Instantiate(missionPrefab, contentMisiones);
-
-            MissionItemUI ui = obj.GetComponent<MissionItemUI>();
-            ui.Setup(m);
-        }
-    }
 
     void MostrarColeccionables()
     {
@@ -102,23 +105,59 @@ public class ControllerGame : MonoBehaviour
     {
         if (pilaMisiones.Count == 0)
         {
-            textoMisionActual.text = "No hay misiones";
             return;
         }
+        else
+        {
 
-        Misiones m = pilaMisiones.Peek();
-        textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
+            Misiones m = pilaMisiones.Peek();
+
+            textoMisionActual.text = $"Misión Actual:\n{m.Titulo}\n{m.Descripcion}";
+
+            switch (m.id)
+            {
+                case 1: imagenMision.texture = imagen1.texture; break;
+                case 2: imagenMision.texture = imagen2.texture; break;
+                case 3: imagenMision.texture = imagen3.texture; break;
+                case 4: imagenMision.texture = imagen4.texture; break;
+                case 5: imagenMision.texture = imagen5.texture; break;
+                case 6: imagenMision.texture = imagen6.texture; break;
+                case 7: imagenMision.texture = imagen7.texture; break;
+                case 8: imagenMision.texture = imagen8.texture; break;
+                case 9: imagenMision.texture = imagen9.texture; break;
+                case 10: imagenMision.texture = imagen10.texture; break;
+                case 11: imagenMision.texture = imagen11.texture; break;
+                case 12: imagenMision.texture = imagen12.texture; break;
+                case 13: imagenMision.texture = imagen13.texture; break;
+                case 14: imagenMision.texture = imagen14.texture; break;
+                case 15: imagenMision.texture = imagen15.texture; break;
+                case 16: imagenMision.texture = imagen16.texture; break;
+                case 17: imagenMision.texture = imagen17.texture; break;
+            }
+            if (m.Completada)
+                menuColores.color = Color.green;
+            else
+                menuColores.color = Color.red;
+            MostrarMisionesCompletadas();
+        }
     }
     public void CompletarMision()
     {
         if (pilaMisiones.Count == 0) return;
 
-        Misiones m = pilaMisiones.Pop();
-        ultimaMision = m;
+        Misiones m = pilaMisiones.Peek();
+
+        if (m.Completada)
+        {
+            return;
+        }
+
         m.Completada = true;
+        pilaCompletadas.Push(m);
+
+        ultimaAccion = 1;
 
         MostrarMisionActual();
-        CrearListaMisionesUI();
     }
     public void buscar()
     {
@@ -137,7 +176,7 @@ public class ControllerGame : MonoBehaviour
 
         foreach (Coleccionables c in listaColeccionables)
         {
-            if (c.Nombre.Equals( textoBusqueda))
+            if (c.Nombre.Equals(textoBusqueda))
             {
                 string color = ObtenerColorRareza(c.Rareza);
 
@@ -155,28 +194,61 @@ public class ControllerGame : MonoBehaviour
             textoColeccionables.text = "No se encontro ningun objeto.";
         }
     }
+    public void CambiarMision()
+    {
+        if (pilaMisiones.Count == 0) return;
+
+        ultimaMisionRemovida = pilaMisiones.Pop();
+
+        MostrarMisionActual();
+        ultimaAccion = 2;
+    }
     public void undo()
     {
-        Debug.Log("SE UNDIO");
-
-        if (ultimaMision == null)
+        if (ultimaAccion == 0)
         {
-            Debug.Log("No se puede hacer undo porque no se ha completado ninguna misión.");
             panelAviso.SetActive(true);
             return;
         }
+        if (ultimaAccion == 1)
+        {
+            if (pilaCompletadas.Count > 0)
+            {
+                Misiones m = pilaCompletadas.Pop();
+                m.Completada = false;
+            }
+        }
+        else if (ultimaAccion == 2)
+        {
+            if (ultimaMisionRemovida != null)
+            {
+                pilaMisiones.Push(ultimaMisionRemovida);
+                ultimaMisionRemovida = null;
+            }
+        }
 
-        pilaMisiones.Push(ultimaMision);
-        Debug.Log("la ultima mision es :" + ultimaMision.Titulo + ".");
-
-        ultimaMision = null;
-
+        ultimaAccion = 0;
         MostrarMisionActual();
-        CrearListaMisionesUI();
     }
+    void MostrarMisionesCompletadas()
+    {
+        misionesCompletadas.text = "";
+
+        if (pilaCompletadas.Count == 0)
+        {
+            misionesCompletadas.text = "No hay misiones completadas";
+            return;
+        }
+
+        foreach (Misiones m in pilaCompletadas)
+        {
+            misionesCompletadas.text += m.Titulo + "\n";
+        }
+    }
+
     public void EsconderAviso()
-    { 
-        panelAviso.SetActive(false); 
+    {
+        panelAviso.SetActive(false);
     }
     public void AbrirMisiones()
     {
@@ -201,5 +273,3 @@ public class ControllerGame : MonoBehaviour
 
 
 }
-
-

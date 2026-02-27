@@ -13,10 +13,5 @@ public class MissionItemUI : MonoBehaviour
     {
         titulo.text = mision.Titulo;
         descripcion.text = mision.Descripcion;
-
-        if (mision.Completada)
-            fondo.color = Color.green;
-        else
-            fondo.color = Color.red;
     }
 }
